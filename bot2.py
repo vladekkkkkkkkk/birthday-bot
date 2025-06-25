@@ -5,7 +5,7 @@ import os
 
 from telegram.ext import (
     ApplicationBuilder, CallbackQueryHandler, MessageHandler,
-    ChatMemberHandler, ContextTypes, CallbackContext, filters
+    ChatMemberHandler, ContextTypes, filters
 )
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -51,7 +51,7 @@ def get_users_by_choice(choice):
 
 
 # Обновление общего списка в чате
-def update_participant_message(context: CallbackContext, chat_id: int):
+def update_participant_message(context: ContextTypes.DEFAULT_TYPE, chat_id: int):
     message = "📋 *Обновлённый список:*\n\n"
     message += "🧳 4–5 июля: " + ", ".join(get_users_by_choice("4")) + "\n"
     message += "🎉 5–6 июля: " + ", ".join(get_users_by_choice("5")) + "\n"
@@ -75,7 +75,7 @@ def update_participant_message(context: CallbackContext, chat_id: int):
 
 
 # Обработка кнопок
-def button_handler(update: Update, context: CallbackContext):
+def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     user = query.from_user
     choice = query.data
@@ -89,7 +89,7 @@ def button_handler(update: Update, context: CallbackContext):
 
 
 # Приветственное сообщение с кнопками и текстом
-def send_welcome_message(context: CallbackContext, chat_id: int):
+def send_welcome_message(context: ContextTypes.DEFAULT_TYPE, chat_id: int):
     keyboard = [
         [InlineKeyboardButton("🧳 с 4 на 5 июля", callback_data="4")],
         [InlineKeyboardButton("🎉 с 5 на 6 июля", callback_data="5")],
@@ -127,7 +127,7 @@ def send_welcome_message(context: CallbackContext, chat_id: int):
 
 
 # Авто-отправка приветствия при добавлении бота в группу
-def new_chat_member(update: Update, context: CallbackContext):
+def new_chat_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message and update.message.new_chat_members:
         for member in update.message.new_chat_members:
             if member.id == context.bot.id:
@@ -135,7 +135,7 @@ def new_chat_member(update: Update, context: CallbackContext):
 
 
 # Ежедневная проверка и напоминания
-def send_reminders(context: CallbackContext):
+def send_reminders(context: ContextTypes.DEFAULT_TYPE):
     today = datetime.datetime.now().date()
 
     if today == datetime.date(2025, 7, 3):
