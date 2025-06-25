@@ -1,10 +1,16 @@
-
 import logging
 import datetime
 import json
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CallbackContext, CallbackQueryHandler, MessageHandler, filters, ChatMemberHandler
 import os
+
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (
+    ApplicationBuilder,
+    CallbackQueryHandler,
+    MessageHandler,
+    ChatMemberHandler,
+    filters,
+)
 
 TOKEN = "8056403018:AAGNxC2e81Wt_SSGFaBP9LG_CPCnR2kIYWs"
 GROUP_ID = -1000000000000  # заменишь на свой если нужно
@@ -161,19 +167,19 @@ def send_reminders(context: CallbackContext):
 
 
 # Запуск бота
+from telegram.ext import ApplicationBuilder
+
 def main():
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
+    application = ApplicationBuilder().token(TOKEN).build()
 
-    dp.add_handler(CallbackQueryHandler(button_handler))
-    dp.add_handler(MessageHandler(filters.status_update.new_chat_members, new_chat_member))
-    dp.add_handler(ChatMemberHandler(new_chat_member, chat_member_types=["my_chat_member"]))
+    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, new_chat_member))
+    application.add_handler(ChatMemberHandler(new_chat_member, chat_member_types=["my_chat_member"]))
 
-    # планируем напоминания
-    updater.job_queue.run_daily(send_reminders, time=datetime.time(hour=12, minute=0))
+    job_queue = application.job_queue
+    job_queue.run_daily(send_reminders, time=datetime.time(hour=12, minute=0))
 
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 
 if __name__ == "__main__":
