@@ -3,7 +3,7 @@ import logging
 import datetime
 import json
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CallbackContext, CallbackQueryHandler, MessageHandler, Filters, ChatMemberHandler
+from telegram.ext import Updater, CallbackContext, CallbackQueryHandler, MessageHandler, filters, ChatMemberHandler
 import os
 
 TOKEN = "8056403018:AAGNxC2e81Wt_SSGFaBP9LG_CPCnR2kIYWs"
@@ -166,7 +166,7 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CallbackQueryHandler(button_handler))
-    dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, new_chat_member))
+    dp.add_handler(MessageHandler(filters.status_update.new_chat_members, new_chat_member))
     dp.add_handler(ChatMemberHandler(new_chat_member, chat_member_types=["my_chat_member"]))
 
     # планируем напоминания
