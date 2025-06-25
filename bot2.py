@@ -5,7 +5,7 @@ import os
 
 from telegram.ext import (
     ApplicationBuilder, CallbackQueryHandler, MessageHandler,
-    ChatMemberHandler, ContextTypes, CallbackContext, filtres
+    ChatMemberHandler, ContextTypes, CallbackContext, filters
 )
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
